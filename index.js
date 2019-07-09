@@ -20,6 +20,7 @@ var AUTH_TYPE = {
  * @property {string}  service_url
  * @property {('1.0'|'2.0'|'3.0'|'saml1.1')} [cas_version='3.0']
  * @property {boolean} [renew=false]
+ * @property {string}  [renew_query_parameter_name='renew']
  * @property {boolean} [is_dev_mode=false]
  * @property {string}  [dev_mode_user='']
  * @property {Object}  [dev_mode_info={}]
@@ -154,6 +155,7 @@ function CASAuthentication(options) {
     this.service_url     = options.service_url;
 
     this.renew           = options.renew !== undefined ? !!options.renew : false;
+    this.renew_query_parameter_name    = options.renew_query_parameter_name !== undefined ? !!options.renew_query_parameter_name : "renew";
 
     this.is_dev_mode     = options.is_dev_mode !== undefined ? !!options.is_dev_mode : false;
     this.dev_mode_user   = options.dev_mode_user !== undefined ? options.dev_mode_user : '';
@@ -250,7 +252,7 @@ CASAuthentication.prototype._login = function(req, res, next) {
     // Set up the query parameters.
     var query = {
         service: this.service_url + url.parse(req.url).pathname,
-        renew: this.renew
+        this.renew_query_parameter_name : this.renew
     };
 
     // Redirect to the CAS login.
