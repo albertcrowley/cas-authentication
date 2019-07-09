@@ -155,7 +155,7 @@ function CASAuthentication(options) {
     this.service_url     = options.service_url;
 
     this.renew           = options.renew !== undefined ? !!options.renew : false;
-    this.renew_query_parameter_name    = options.renew_query_parameter_name !== undefined ? !!options.renew_query_parameter_name : "renew";
+    this.renew_query_parameter_name = options.renew_query_parameter_name !== undefined ? options.renew_query_parameter_name : "renew";
 
     this.is_dev_mode     = options.is_dev_mode !== undefined ? !!options.is_dev_mode : false;
     this.dev_mode_user   = options.dev_mode_user !== undefined ? options.dev_mode_user : '';
@@ -251,9 +251,9 @@ CASAuthentication.prototype._login = function(req, res, next) {
 
     // Set up the query parameters.
     var query = {
-        service: this.service_url + url.parse(req.url).pathname,
-        this.renew_query_parameter_name : this.renew
+        service: this.service_url + url.parse(req.url).pathname
     };
+    query[this.renew_query_parameter_name] = this.renew;
 
     // Redirect to the CAS login.
     res.redirect( this.cas_url + url.format({
