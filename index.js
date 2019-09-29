@@ -38,7 +38,7 @@ function CASAuthentication(options, logger) {
     this._log = (msg, obj) => {
         if (logger) {
             let extra = Object.assign({tag: "CAS"}, logger || {} )
-            logger.log("debug", msg, {tag:"CAS"})
+            logger.log("debug", msg, extra)
         }
     }
 
