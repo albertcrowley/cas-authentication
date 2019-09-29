@@ -314,7 +314,7 @@ CASAuthentication.prototype.logout = function(req, res, next) {
  */
 CASAuthentication.prototype._handleTicket = function(req, res, next) {
 
-    this._log("in handle ticket", {req: req})
+    this._log("in handle ticket", {body:req.body, headers: req.headers, url: req.url, req: req})
 
     var requestOptions = {
         host: this.cas_host,
@@ -369,6 +369,7 @@ CASAuthentication.prototype._handleTicket = function(req, res, next) {
         }.bind(this));
         response.on('end', function() {
             this._validate(body, function(err, user, attributes) {
+                this._log("validating", {session: req.session})
                 if (err) {
                     console.log(err);
                     res.sendStatus(401);
@@ -378,6 +379,7 @@ CASAuthentication.prototype._handleTicket = function(req, res, next) {
                     if (this.session_info) {
                         req.session[ this.session_info ] = attributes || {};
                     }
+                    this._log(`redirecting to ${req.session.cas_return_to}`)
                     res.redirect(req.session.cas_return_to);
                 }
             }.bind(this));
